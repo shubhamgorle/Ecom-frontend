@@ -58,7 +58,7 @@ const navigate = useNavigate()
         },
       };
       const { data } = await axios.post(
-        "/api/v1/payment/process",
+        "https://e-commerse-backend-mmp3.onrender.com/api/v1/payment/process",
         paymentData,
         config
       );
