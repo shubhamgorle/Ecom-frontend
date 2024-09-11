@@ -112,9 +112,9 @@
 }
 
 .productCard:hover {
-  box-shadow: 0 0 5px rgba(15, 15, 15, 0.26);
-
-  transform: translateY(-1vmax);
+  /* box-shadow: 0 0 5px rgba(15, 15, 15, 0.26); */
+  transform: translateY(-0.4vmax);
+  box-shadow: 0 0 0 0.5px rgb(15, 15, 15,0.26);
 }
 
 @media screen and (max-width: 600px) {

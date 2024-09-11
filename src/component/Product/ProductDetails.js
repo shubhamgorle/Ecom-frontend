@@ -21,11 +21,12 @@ import {
 } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
 import { NEW_REVIEW_RESET } from "../../constants/productConstants";
+import { useParams } from "react-router-dom";
 
-const ProductDetails = ({ match }) => {
+const ProductDetails = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
-
+  const {id} = useParams();
   const { product, loading, error } = useSelector(
     (state) => state.productDetails
   );
@@ -33,10 +34,10 @@ const ProductDetails = ({ match }) => {
   const { success, error: reviewError } = useSelector(
     (state) => state.newReview
   );
-
+console.log(product)
   const options = {
     size: "large",
-    value: product.ratings,
+    value: product.ratings ? product.ratings : 0,
     readOnly: true,
     precision: 0.5,
   };
@@ -47,7 +48,7 @@ const ProductDetails = ({ match }) => {
   const [comment, setComment] = useState("");
 
   const increaseQuantity = () => {
-    if (product.Stock <= quantity) return;
+    if (product.stock <= quantity) return;
 
     const qty = quantity + 1;
     setQuantity(qty);
@@ -61,7 +62,7 @@ const ProductDetails = ({ match }) => {
   };
 
   const addToCartHandler = () => {
-    dispatch(addItemsToCart(match.params.id, quantity));
+    dispatch(addItemsToCart(id, quantity));
     alert.success("Item Added To Cart");
   };
 
@@ -74,7 +75,7 @@ const ProductDetails = ({ match }) => {
 
     myForm.set("rating", rating);
     myForm.set("comment", comment);
-    myForm.set("productId", match.params.id);
+    myForm.set("productId", id);
 
     dispatch(newReview(myForm));
 
@@ -96,8 +97,8 @@ const ProductDetails = ({ match }) => {
       alert.success("Review Submitted Successfully");
       dispatch({ type: NEW_REVIEW_RESET });
     }
-    dispatch(getProductDetails(match.params.id));
-  }, [dispatch, match.params.id, error, alert, reviewError, success]);
+    dispatch(getProductDetails(id));
+  }, [dispatch,id, error, alert, reviewError, success]);
 
   return (
     <Fragment>
@@ -109,8 +110,8 @@ const ProductDetails = ({ match }) => {
           <div className="ProductDetails">
             <div>
               <Carousel>
-                {product.images &&
-                  product.images.map((item, i) => (
+                {product.Images &&
+                  product.Images.map((item, i) => (
                     <img
                       className="CarouselImage"
                       key={i}
@@ -151,8 +152,8 @@ const ProductDetails = ({ match }) => {
 
                 <p>
                   Status:
-                  <b className={product.Stock < 1 ? "redColor" : "greenColor"}>
-                    {product.Stock < 1 ? "OutOfStock" : "InStock"}
+                  <b className={product.stock < 1 ? "redColor" : "greenColor"}>
+                    {product.stock < 1 ? "OutOfStock" : "InStock"}
                   </b>
                 </p>
               </div>

@@ -15,11 +15,13 @@ import SpellcheckIcon from "@material-ui/icons/Spellcheck";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import SideBar from "./Sidebar";
 import { UPDATE_PRODUCT_RESET } from "../../constants/productConstants";
+import { useNavigate, useParams } from "react-router-dom";
 
-const UpdateProduct = ({ history, match }) => {
+const UpdateProduct = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
-
+  const navigate = useNavigate();
+  const {id} = useParams();
   const { error, product } = useSelector((state) => state.productDetails);
 
   const {
@@ -47,7 +49,7 @@ const UpdateProduct = ({ history, match }) => {
     "SmartPhones",
   ];
 
-  const productId = match.params.id;
+  const productId = id;
 
   useEffect(() => {
     if (product && product._id !== productId) {
@@ -57,8 +59,8 @@ const UpdateProduct = ({ history, match }) => {
       setDescription(product.description);
       setPrice(product.price);
       setCategory(product.category);
-      setStock(product.Stock);
-      setOldImages(product.images);
+      setStock(product.stock);
+      setOldImages(product.Images);
     }
     if (error) {
       alert.error(error);
@@ -72,14 +74,14 @@ const UpdateProduct = ({ history, match }) => {
 
     if (isUpdated) {
       alert.success("Product Updated Successfully");
-      history.push("/admin/products");
+      navigate("/admin/products");
       dispatch({ type: UPDATE_PRODUCT_RESET });
     }
   }, [
     dispatch,
     alert,
     error,
-    history,
+    navigate,
     isUpdated,
     productId,
     product,
@@ -95,7 +97,7 @@ const UpdateProduct = ({ history, match }) => {
     myForm.set("price", price);
     myForm.set("description", description);
     myForm.set("category", category);
-    myForm.set("Stock", Stock);
+    myForm.set("stock", Stock);
 
     images.forEach((image) => {
       myForm.append("images", image);
@@ -135,7 +137,7 @@ const UpdateProduct = ({ history, match }) => {
             encType="multipart/form-data"
             onSubmit={updateProductSubmitHandler}
           >
-            <h1>Create Product</h1>
+            <h1>Update Product</h1>
 
             <div>
               <SpellcheckIcon />
@@ -224,7 +226,7 @@ const UpdateProduct = ({ history, match }) => {
               type="submit"
               disabled={loading ? true : false}
             >
-              Create
+              Update
             </Button>
           </form>
         </div>

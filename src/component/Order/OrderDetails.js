@@ -2,15 +2,15 @@ import React, { Fragment, useEffect } from "react";
 import "./orderDetails.css";
 import { useSelector, useDispatch } from "react-redux";
 import MetaData from "../layout/MetaData";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Typography } from "@material-ui/core";
 import { getOrderDetails, clearErrors } from "../../actions/orderAction";
 import Loader from "../layout/Loader/Loader";
 import { useAlert } from "react-alert";
 
-const OrderDetails = ({ match }) => {
+const OrderDetails = () => {
   const { order, error, loading } = useSelector((state) => state.orderDetails);
-
+     const {id} = useParams()
   const dispatch = useDispatch();
   const alert = useAlert();
 
@@ -20,8 +20,8 @@ const OrderDetails = ({ match }) => {
       dispatch(clearErrors());
     }
 
-    dispatch(getOrderDetails(match.params.id));
-  }, [dispatch, alert, error, match.params.id]);
+    dispatch(getOrderDetails(id));
+  }, [dispatch, alert, error, id]);
   return (
     <Fragment>
       {loading ? (

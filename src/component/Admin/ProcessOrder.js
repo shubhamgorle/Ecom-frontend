@@ -15,11 +15,11 @@ import AccountTreeIcon from "@material-ui/icons/AccountTree";
 import { Button } from "@material-ui/core";
 import { UPDATE_ORDER_RESET } from "../../constants/orderConstants";
 import "./processOrder.css";
-
-const ProcessOrder = ({ history, match }) => {
+import { useParams } from "react-router-dom";
+const ProcessOrder = () => {
   const { order, error, loading } = useSelector((state) => state.orderDetails);
   const { error: updateError, isUpdated } = useSelector((state) => state.order);
-
+  const {id} = useParams();
   const updateOrderSubmitHandler = (e) => {
     e.preventDefault();
 
@@ -27,7 +27,7 @@ const ProcessOrder = ({ history, match }) => {
 
     myForm.set("status", status);
 
-    dispatch(updateOrder(match.params.id, myForm));
+    dispatch(updateOrder(id, myForm));
   };
 
   const dispatch = useDispatch();
@@ -49,8 +49,8 @@ const ProcessOrder = ({ history, match }) => {
       dispatch({ type: UPDATE_ORDER_RESET });
     }
 
-    dispatch(getOrderDetails(match.params.id));
-  }, [dispatch, alert, error, match.params.id, isUpdated, updateError]);
+    dispatch(getOrderDetails(id));
+  }, [dispatch, alert, error, id, isUpdated, updateError]);
 
   return (
     <Fragment>
@@ -164,7 +164,7 @@ const ProcessOrder = ({ history, match }) => {
                     <AccountTreeIcon />
                     <select onChange={(e) => setStatus(e.target.value)}>
                       <option value="">Choose Category</option>
-                      {order.orderStatus === "Processing" && (
+                      {order.orderStatus === "Pending" && (
                         <option value="Shipped">Shipped</option>
                       )}
 
